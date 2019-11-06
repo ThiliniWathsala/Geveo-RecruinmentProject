@@ -24,9 +24,9 @@
                 <tbody>
                     <tr *ngFor="let position of positions">
 
-                        <td class="column1">{{position.title}}</td>
-                        <td class="column2">{{position.summary}}</td>
-                        <td class="column3">{{position.description}}</td>
+                        <td class="column1">{{position.position}}</td>
+                        <td class="column2">{{position.jobSummery}}</td>
+                        <td class="column3">{{position.jobDescription}}</td>
                         <td class="column4"><button value="{{position._id}}" (click)="delete(position)" class="btn-reply">Delete</button></td>
 
                     </tr>
