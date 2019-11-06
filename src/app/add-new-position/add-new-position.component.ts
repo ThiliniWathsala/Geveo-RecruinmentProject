@@ -23,8 +23,8 @@ export class AddNewPositionComponent implements OnInit {
   }
 
   onSubmit(){
-    console.log(this.position);
-    this.http.post<{message:string, postId:string }>('http://localhost:3000/api/position',this.position).subscribe(
+    //console.log(this.position);
+    this.http.post<{message:string, postId:string }>('http://localhost:3000/api/position/position',this.position).subscribe(
       data => console.log('success', data)
     )
     alert ("New position added!");
