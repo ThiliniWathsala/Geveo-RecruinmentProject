@@ -18,7 +18,7 @@ export class PositionListComponent implements OnInit {
   positions:PositionList[]=[];
   positionSub:Subscription;
 
-  name:string="thilini";
+ 
   constructor(private http:HttpClient) { }
 
   ngOnInit() {
@@ -34,7 +34,7 @@ export class PositionListComponent implements OnInit {
         }
       })
     })).subscribe(data=>{
-      this.name=data[0].jobDescription;
+     
       console.log(data)
       this.positions=data;
     }
@@ -43,17 +43,7 @@ export class PositionListComponent implements OnInit {
   }
 
  
-  // getPositions(){
-  //   this.http.get<{message:string,position:PositionList[]}>("http://localhost:3000/api/position/check")
    
-  //   .subscribe((fetchedPosition)=>{
-  //     //console.log(fetchedPosition);
-  //      this.positions=fetchedPosition.position;
-  //      console.log(this.positions);
-  //    // this.posUpdate.next([...this.positions]);
-     
-  //   });
-  //   }
   getPositions():Observable<any>{
     console.log("check")
     return this.http.get<{message:string,position:PositionList[]}>("http://localhost:3000/api/position/check")
