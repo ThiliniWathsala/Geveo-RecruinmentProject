@@ -4,7 +4,7 @@ import { PositionList } from '../modelClasses/position-list';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
-import { Subscription } from 'rxjs';  
+import { Subscription, Observable } from 'rxjs';  
 import { Subject } from 'rxjs';
 
 
@@ -22,25 +22,41 @@ export class PositionListComponent implements OnInit {
   constructor(private http:HttpClient) { }
 
   ngOnInit() {
-    this.getPositions();
+    this.getPositions().pipe(map((posistions)=>{
+      console.log("emptyda?")
+      // console.log(posistions)
+      return posistions.position.map(pos=>{
+        return{
+          id: pos._id,
+          position:pos.position,
+          jobSummery:pos.jobSummery,
+          jobDescription:pos.jobDescription
+        }
+      })
+    })).subscribe(data=>{
+      this.name=data[0].jobDescription;
+      console.log(data)
+      this.positions=data;
+    }
 
-  
+    )
   }
 
  
-  getPositions(){
-    this.http.get<{message:string,position:PositionList[]}>("http://localhost:3000/api/position/check")
+  // getPositions(){
+  //   this.http.get<{message:string,position:PositionList[]}>("http://localhost:3000/api/position/check")
    
-    .subscribe((fetchedPosition)=>{
-      //console.log(fetchedPosition);
-       this.positions=fetchedPosition.position;
-       console.log(this.positions);
-     // this.posUpdate.next([...this.positions]);
+  //   .subscribe((fetchedPosition)=>{
+  //     //console.log(fetchedPosition);
+  //      this.positions=fetchedPosition.position;
+  //      console.log(this.positions);
+  //    // this.posUpdate.next([...this.positions]);
      
-    });
-  
-
-
+  //   });
+  //   }
+  getPositions():Observable<any>{
+    console.log("check")
+    return this.http.get<{message:string,position:PositionList[]}>("http://localhost:3000/api/position/check")
   }
 
 
