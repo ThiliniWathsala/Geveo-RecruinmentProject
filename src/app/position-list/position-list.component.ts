@@ -17,8 +17,8 @@ export class PositionListComponent implements OnInit {
 
   positions:PositionList[]=[];
   positionSub:Subscription;
-
-  name:string="thilini";
+  private postUpdated=new Subject<PositionList[]>();
+ 
   constructor(private http:HttpClient) { }
 
   ngOnInit() {
@@ -27,14 +27,14 @@ export class PositionListComponent implements OnInit {
       // console.log(posistions)
       return posistions.position.map(pos=>{
         return{
-          id: pos._id,
+          _id: pos._id,
           position:pos.position,
           jobSummery:pos.jobSummery,
           jobDescription:pos.jobDescription
         }
       })
     })).subscribe(data=>{
-      this.name=data[0].jobDescription;
+     
       console.log(data)
       this.positions=data;
     }
@@ -43,35 +43,21 @@ export class PositionListComponent implements OnInit {
   }
 
  
-  // getPositions(){
-  //   this.http.get<{message:string,position:PositionList[]}>("http://localhost:3000/api/position/check")
    
-  //   .subscribe((fetchedPosition)=>{
-  //     //console.log(fetchedPosition);
-  //      this.positions=fetchedPosition.position;
-  //      console.log(this.positions);
-  //    // this.posUpdate.next([...this.positions]);
-     
-  //   });
-  //   }
   getPositions():Observable<any>{
     console.log("check")
     return this.http.get<{message:string,position:PositionList[]}>("http://localhost:3000/api/position/check")
   }
 
 
-  delete(pos:PositionList){
-    console.log(pos);
-    // const id =$value;
-    // console.log(id);
-    // this.http.post<PositionList[]>('http://localhost:3000/delPositions',$value).subscribe(
-    //   response => {
-    //     this.positions = response;
-    //     console.log(this.positions);
-    //   }
-    // );
-    this.http.post<any>('http://localhost:3000/delPositions',pos).subscribe(
-      data => console.log('success', data)
-    );
+  delete(posId:string){
+    console.log(posId);
+   
+    this.http.delete("http://localhost:3000/api/position/"+posId)
+    .subscribe(()=>{
+      const updatedPost=this. positions.filter(updatepost=>updatepost._id!==posId); // filetr used to filter the deleted post n this method update post without reloading
+      this. positions=updatedPost;
+      this.postUpdated.next([...this.positions]);
+  });
   }
 }
